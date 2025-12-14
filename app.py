@@ -21,6 +21,7 @@ mysql = MySQL(app)
 @app.route('/')
 def home():
     return jsonify(message="Flask is running!")
+
 # ---------------- AUTH ----------------
 @app.route('/login', methods=['POST'])
 def login():
@@ -34,7 +35,6 @@ def login():
         return jsonify(access_token=token)
 
     return jsonify(error="Invalid credentials"), 401
-
 
 # ---------------- READ ----------------
 @app.route('/students', methods=['GET'])
@@ -105,7 +105,6 @@ def create_student():
 
     return jsonify(message="Student created"), 201
 
-
 # ---------------- UPDATE ----------------
 @app.route('/students/<int:id>', methods=['PUT'])
 @jwt_required()
@@ -129,8 +128,6 @@ def update_student(id):
     mysql.connection.commit()
     cur.close()
     return jsonify(message="Student updated")
-
-
 
 # ---------------- DELETE ----------------
 @app.route('/students/<int:id>', methods=['DELETE'])
