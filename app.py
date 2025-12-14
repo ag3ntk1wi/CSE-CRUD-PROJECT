@@ -112,6 +112,9 @@ def create_student():
 def update_student(id):
     data = request.json
 
+    if not data:
+        return jsonify(error="Request body is empty"), 400
+
     cur = mysql.connection.cursor()
     cur.execute("""
         UPDATE student
