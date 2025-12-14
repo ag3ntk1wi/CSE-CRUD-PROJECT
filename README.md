@@ -167,5 +167,5 @@ pytest
 
 ## Author
 
-**Juan Miguel M. Malate**
+**Juan Miguel M. Malate**  
 BSCS3-B2
