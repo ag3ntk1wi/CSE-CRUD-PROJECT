@@ -11,13 +11,13 @@ jwt = JWTManager(app)
 def home():
     return "Hello, Flask!"
 
-    if __name__ == "__main__":
-        app.run(debug=True)
-
 db = mysql.connector.connect(
     host="localhost",
     user="root",
     password="root",
     database="malatecselec"
 )
-cursor = db.cursor(dictionary=True)
+cursor = db.cursor(dictionary=True) 
+
+if __name__ == "__main__":
+        app.run(debug=True)
