@@ -138,9 +138,34 @@ def test_update_nonexistent_student(client):
 def test_update_student_success(client):
     token = get_token(client)
 
-    # assumes student with ID 1 exists
-    response = client.put(
-        '/students/1',
+    # Create a student first
+    create_response = client.post(
+        '/students',
+        json={
+            "last_name": "Update",
+            "first_name": "Test",
+            "age": 20,
+            "block": "1",
+            "year": "2",
+            "instructor_id": 1,
+            "program_id": 1
+        },
+        headers={'Authorization': f'Bearer {token}'}
+    )
+
+    assert create_response.status_code == 201
+
+    # Get created student's ID
+    students = client.get(
+        '/students',
+        headers={'Authorization': f'Bearer {token}'}
+    ).get_json()
+
+    student_id = students[-1]['id']
+
+    # Update that student
+    update_response = client.put(
+        f'/students/{student_id}',
         json={
             "age": 21,
             "block": "2",
@@ -149,7 +174,8 @@ def test_update_student_success(client):
         headers={'Authorization': f'Bearer {token}'}
     )
 
-    assert response.status_code == 200
+    assert update_response.status_code == 200
+
 
 
 # ---------------- DELETE TESTS ----------------
@@ -168,8 +194,8 @@ def test_delete_nonexistent_student(client):
 def test_delete_student_success(client):
     token = get_token(client)
 
-    # Create a student first so delete is safe
-    create = client.post(
+    # Create a student first
+    create_response = client.post(
         '/students',
         json={
             "last_name": "Delete",
@@ -183,15 +209,24 @@ def test_delete_student_success(client):
         headers={'Authorization': f'Bearer {token}'}
     )
 
-    assert create.status_code == 201
+    assert create_response.status_code == 201
 
-    # Assuming auto-increment ID, delete last inserted student
-    delete = client.delete(
-        '/students/1',
+    # Fetch students and get the last inserted ID
+    students = client.get(
+        '/students',
+        headers={'Authorization': f'Bearer {token}'}
+    ).get_json()
+
+    student_id = students[-1]['id']
+
+    # Delete that student
+    delete_response = client.delete(
+        f'/students/{student_id}',
         headers={'Authorization': f'Bearer {token}'}
     )
 
-    assert delete.status_code == 200
+    assert delete_response.status_code == 200
+
 
 
 # ---------------- SEARCH TESTS ----------------
